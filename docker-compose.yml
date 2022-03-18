@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8081"
+    depends_on:
+      - redis
+    networks:
+      - mynetwork-verly
+  redis:
+    image: redis
+    environment:
+      - REDIS_APPENDONLY=yes
+      - REDIS_APPENDFSYNC=always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - mynetwork-verly
+
+networks:
+  mynetwork-verly:
+    driver: bridge
